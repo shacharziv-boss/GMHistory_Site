@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<template id="__bundler_thumbnail" data-bg-color="#0A0A0A">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0A0A0A"></rect>
+    <text x="600" y="430" font-family="Georgia, serif" font-size="160" fill="#FFFFFF" text-anchor="middle">GMH</text>
+  </svg>
+</template>
+<helmet>
+  <link rel="stylesheet" href="_ds/gmh-book-design-system-d91c62d7-3bdb-497d-9531-d3ff7c43f702/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/gmh-book-design-system-d91c62d7-3bdb-497d-9531-d3ff7c43f702/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/gmh-book-design-system-d91c62d7-3bdb-497d-9531-d3ff7c43f702/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/gmh-book-design-system-d91c62d7-3bdb-497d-9531-d3ff7c43f702/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/gmh-book-design-system-d91c62d7-3bdb-497d-9531-d3ff7c43f702/styles.css">
+  <script src="_ds/gmh-book-design-system-d91c62d7-3bdb-497d-9531-d3ff7c43f702/_ds_bundle.js"></script>
+  <style>
+    body { margin: 0; background: var(--surface-white); font-family: var(--font-body); }
+    a { color: var(--link-on-light); }
+    a:hover { color: var(--link-on-light-hover); }
+  </style>
+</helmet>
+
+<div style="width:100%;background:var(--surface-white);">
+
+  <!-- HEADER -->
+  <div data-screen-label="Header" style="position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:var(--space-4) var(--page-margin);background:var(--surface-white);border-bottom:1px solid var(--hairline-on-light);box-sizing:border-box;">
+    <img src="assets/gmh-logo.png" alt="GMH" style="width:210px;height:34px;object-fit:contain;display:block;">
+
+    <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;align-items:center;gap:var(--space-7);font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);">
+        <a href="#book" style="text-decoration:none;">Book</a>
+        <a href="#shop" style="text-decoration:none;">Shop</a>
+        <a href="#about" style="text-decoration:none;">About</a>
+        <button onClick="{{ openCart }}" style="background:none;border:none;padding:0;cursor:pointer;font:inherit;color:inherit;text-transform:uppercase;letter-spacing:var(--tracking-label);">Cart ({{ cartCount }})</button>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ toggleMenu }}" aria-label="Open menu" style="background:none;border:none;padding:var(--space-2);cursor:pointer;display:flex;flex-direction:column;gap:5px;">
+        <span style="width:26px;height:2px;background:var(--surface-black);display:block;"></span>
+        <span style="width:26px;height:2px;background:var(--surface-black);display:block;"></span>
+        <span style="width:26px;height:2px;background:var(--surface-black);display:block;"></span>
+      </button>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:30;background:var(--surface-black);display:flex;flex-direction:column;">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:var(--space-4) var(--page-margin);box-sizing:border-box;">
+        <img src="assets/gmh-logo.png" alt="GMH" style="width:180px;height:auto;object-fit:contain;display:block;filter:invert(1) brightness(2);">
+        <button onClick="{{ closeMenu }}" aria-label="Close menu" style="background:none;border:none;padding:var(--space-2);cursor:pointer;font:var(--weight-body-regular) 2rem/1 var(--font-body);color:var(--text-on-dark);">×</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:var(--space-6);padding:var(--space-7) var(--page-margin);">
+        <a href="#book" onClick="{{ closeMenu }}" style="text-decoration:none;color:var(--text-on-dark);font:var(--weight-display) var(--size-display-sm)/1 var(--font-display);text-transform:uppercase;">Book</a>
+        <a href="#shop" onClick="{{ closeMenu }}" style="text-decoration:none;color:var(--text-on-dark);font:var(--weight-display) var(--size-display-sm)/1 var(--font-display);text-transform:uppercase;">Shop</a>
+        <a href="#about" onClick="{{ closeMenu }}" style="text-decoration:none;color:var(--text-on-dark);font:var(--weight-display) var(--size-display-sm)/1 var(--font-display);text-transform:uppercase;">About</a>
+        <button onClick="{{ openCart }}" style="background:none;border:none;padding:0;text-align:left;cursor:pointer;color:var(--text-on-dark);font:var(--weight-display) var(--size-display-sm)/1 var(--font-display);text-transform:uppercase;">Cart ({{ cartCount }})</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ cartOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeCart }}" style="position:fixed;inset:0;z-index:49;background:rgba(10,10,10,.45);"></div>
+  </sc-if>
+
+  <div style="{{ cartDrawerStyle }}">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:var(--space-5) var(--space-6);border-bottom:1px solid var(--hairline-on-light);">
+      <div style="font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);">Cart ({{ cartCount }})</div>
+      <button onClick="{{ closeCart }}" aria-label="Close cart" style="background:none;border:none;cursor:pointer;font:var(--weight-body-regular) 1.75rem/1 var(--font-body);color:var(--text-on-light);">×</button>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:var(--space-6);">
+      <sc-if value="{{ cartHasItems }}" hint-placeholder-val="{{ false }}">
+        <sc-for list="{{ cartItemsView }}" as="item" hint-placeholder-count="0">
+          <div style="display:flex;gap:var(--space-4);padding:var(--space-4) 0;border-bottom:1px solid var(--hairline-on-light);">
+            <div style="width:72px;height:72px;flex:none;background:var(--surface-black);opacity:.06;"></div>
+            <div style="flex:1;">
+              <div style="display:flex;justify-content:space-between;gap:var(--space-3);">
+                <div style="font:var(--weight-body-bold) var(--size-body)/1.2 var(--font-body);">{{ item.name }}</div>
+                <button onClick="{{ item.remove }}" style="background:none;border:none;cursor:pointer;font:var(--weight-body-regular) var(--size-caption)/1 var(--font-body);color:var(--text-on-light-faint);text-transform:uppercase;letter-spacing:var(--tracking-caption);">Remove</button>
+              </div>
+              <div style="font:var(--weight-body-regular) var(--size-body-sm)/1.4 var(--font-body);color:var(--text-on-light-muted);margin-top:var(--space-1);">${{ item.price }}</div>
+              <div style="display:flex;align-items:center;gap:var(--space-3);margin-top:var(--space-3);">
+                <button onClick="{{ item.dec }}" style="width:28px;height:28px;border:1px solid var(--hairline-on-light);background:none;cursor:pointer;font:var(--weight-body-bold) var(--size-body)/1 var(--font-body);">–</button>
+                <span style="font:var(--weight-body-regular) var(--size-body)/1 var(--font-body);min-width:16px;text-align:center;">{{ item.qty }}</span>
+                <button onClick="{{ item.inc }}" style="width:28px;height:28px;border:1px solid var(--hairline-on-light);background:none;cursor:pointer;font:var(--weight-body-bold) var(--size-body)/1 var(--font-body);">+</button>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </sc-if>
+      <sc-if value="{{ cartIsEmpty }}" hint-placeholder-val="{{ true }}">
+        <div style="font:var(--weight-body-regular) var(--size-body)/1.5 var(--font-body);color:var(--text-on-light-muted);padding:var(--space-7) 0;text-align:center;">Your cart is empty.</div>
+      </sc-if>
+    </div>
+    <div style="padding:var(--space-6);border-top:1px solid var(--hairline-on-light);">
+      <div style="display:flex;justify-content:space-between;font:var(--weight-body-bold) var(--size-body)/1 var(--font-body);margin-bottom:var(--space-5);">
+        <span style="text-transform:uppercase;letter-spacing:var(--tracking-label);">Subtotal</span>
+        <span>${{ cartSubtotal }}</span>
+      </div>
+      <button onClick="{{ openCheckout }}" style="display:block;width:100%;text-align:center;background:var(--surface-black);color:var(--text-on-dark);font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);padding:var(--space-4) 0;border:none;cursor:pointer;" style-hover="background:var(--surface-magenta);">Checkout</button>
+    </div>
+  </div>
+
+  <!-- CHECKOUT -->
+  <div style="{{ checkoutOverlayStyle }}">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:var(--space-5) var(--page-margin);border-bottom:1px solid var(--hairline-on-light);flex:none;">
+      <img src="assets/gmh-logo.png" alt="GMH" style="width:150px;height:auto;object-fit:contain;display:block;">
+      <button onClick="{{ closeCheckout }}" aria-label="Close checkout" style="background:none;border:none;cursor:pointer;font:var(--weight-body-regular) 1.75rem/1 var(--font-body);color:var(--text-on-light);">×</button>
+    </div>
+
+    <sc-if value="{{ orderPlaced }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:var(--space-9) var(--page-margin);">
+        <div style="font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);color:var(--text-on-light-faint);margin-bottom:var(--space-4);">Order confirmed</div>
+        <div style="font:var(--weight-display) var(--size-display-lg)/var(--leading-display-tight) var(--font-display);text-transform:uppercase;margin-bottom:var(--space-5);">Thank you</div>
+        <div style="font:var(--weight-body-regular) var(--size-body-lg)/1.5 var(--font-body);color:var(--text-on-light-muted);max-width:44ch;margin-bottom:var(--space-3);">Your order <strong style="color:var(--text-on-light);">{{ orderNumber }}</strong> has been placed. A confirmation email is on its way with shipping updates.</div>
+        <button onClick="{{ closeCheckout }}" style="margin-top:var(--space-6);background:var(--surface-black);color:var(--text-on-dark);font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);padding:var(--space-4) var(--space-7);border:none;cursor:pointer;" style-hover="background:var(--surface-magenta);">Continue shopping</button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ checkoutOpen }}" hint-placeholder-val="{{ true }}">
+    <div style="{{ checkoutLayoutStyle }}">
+      <div>
+        <div style="display:flex;gap:var(--space-6);margin-bottom:var(--space-7);">
+          <span style="{{ stepShippingLabelStyle }}">1. Shipping</span>
+          <span style="{{ stepPaymentLabelStyle }}">2. Payment</span>
+          <span style="{{ stepReviewLabelStyle }}">3. Review</span>
+        </div>
+
+        <sc-if value="{{ isStepShipping }}" hint-placeholder-val="{{ true }}">
+          <div>
+            <div style="font:var(--weight-display) var(--size-display-md)/var(--leading-display-tight) var(--font-display);text-transform:uppercase;margin-bottom:var(--space-6);">Shipping details</div>
+            <div style="display:flex;flex-direction:column;gap:var(--space-4);">
+              <input type="email" placeholder="Email" value="{{ shipEmail }}" onChange="{{ setShipEmail }}" style="background:transparent;border:none;border-bottom:1px solid var(--hairline-on-light);color:var(--text-on-light);font:var(--weight-body-regular) var(--size-body)/1 var(--font-body);padding:var(--space-3) 0;outline:none;">
+              <input type="text" placeholder="Full name" value="{{ shipName }}" onChange="{{ setShipName }}" style="background:transparent;border:none;border-bottom:1px solid var(--hairline-on-light);color:var(--text-on-light);font:var(--weight-body-regular) var(--size-body)/1 var(--font-body);padding:var(--space-3) 0;outline:none;">
+              <input type="text" placeholder="Address" value="{{ shipAddress }}" onChange="{{ setShipAddress }}" style="background:transparent;border:none;border-bottom:1px solid var(--hairline-on-light);color:var(--text-on-light);font:var(--weight-body-regular) var(--size-body)/1 var(--font-body);padding:var(--space-3) 0;outline:none;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);">
+                <input type="text" placeholder="City" value="{{ shipCity }}" onChange="{{ setShipCity }}" style="background:transparent;border:none;border-bottom:1px solid var(--hairline-on-light);color:var(--text-on-light);font:var(--weight-body-regular) var(--size-body)/1 var(--font-body);padding:var(--space-3) 0;outline:none;">
+                <input type="text" placeholder="ZIP / postal code" value="{{ shipZip }}" onChange="{{ setShipZip }}" style="background:transparent;border:none;border-bottom:1px solid var(--hairline-on-light);color:var(--text-on-light);font:var(--weight-body-regular) var(--size-body)/1 var(--font-body);padding:var(--space-3) 0;outline:none;">
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);">
+                <input type="text" placeholder="Country" value="{{ shipCountry }}" onChange="{{ setShipCountry }}" style="background:transparent;border:none;border-bottom:1px solid var(--hairline-on-light);color:var(--text-on-light);font:var(--weight-body-regular) var(--size-body)/1 var(--font-body);padding:var(--space-3) 0;outline:none;">
+                <input type="tel" placeholder="Phone" value="{{ shipPhone }}" onChange="{{ setShipPhone }}" style="background:transparent;border:none;border-bottom:1px solid var(--hairline-on-light);color:var(--text-on-light);font:var(--weight-body-regular) var(--size-body)/1 var(--font-body);padding:var(--space-3) 0;outline:none;">
+              </div>
+            </div>
+
+            <div style="font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);color:var(--text-on-light-faint);margin:var(--space-7) 0 var(--space-4);">Shipping method</div>
+            <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+              <label style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);border:1px solid var(--hairline-on-light);padding:var(--space-4);cursor:pointer;">
+                <span style="display:flex;align-items:center;gap:var(--space-3);font:var(--weight-body-regular) var(--size-body)/1 var(--font-body);"><input type="radio" name="shipmethod" checked="{{ isStandardShipping }}" onChange="{{ setStandardShipping }}"> Standard — 5-7 days</span>
+                <span style="font:var(--weight-body-bold) var(--size-body)/1 var(--font-body);">$6</span>
+              </label>
+              <label style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);border:1px solid var(--hairline-on-light);padding:var(--space-4);cursor:pointer;">
+                <span style="display:flex;align-items:center;gap:var(--space-3);font:var(--weight-body-regular) var(--size-body)/1 var(--font-body);"><input type="radio" name="shipmethod" checked="{{ isExpressShipping }}" onChange="{{ setExpressShipping }}"> Express — 2-3 days</span>
+                <span style="font:var(--weight-body-bold) var(--size-body)/1 var(--font-body);">$15</span>
+              </label>
+            </div>
+
+            <button onClick="{{ goPayment }}" style="margin-top:var(--space-7);background:var(--surface-black);color:var(--text-on-dark);font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);padding:var(--space-4) var(--space-7);border:none;cursor:pointer;" style-hover="background:var(--surface-magenta);">Continue to payment</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isStepPayment }}" hint-placeholder-val="{{ false }}">
+          <div>
+            <div style="font:var(--weight-display) var(--size-display-md)/var(--leading-display-tight) var(--font-display);text-transform:uppercase;margin-bottom:var(--space-6);">Payment</div>
+            <div style="display:flex;gap:var(--space-3);margin-bottom:var(--space-6);">
+              <button onClick="{{ setCardPayment }}" style="flex:1;padding:var(--space-4);border:1px solid var(--surface-black);background:{{ cardBtnBg }};color:{{ cardBtnColor }};cursor:pointer;font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);">Card</button>
+              <button onClick="{{ setPaypalPayment }}" style="flex:1;padding:var(--space-4);border:1px solid var(--surface-black);background:{{ paypalBtnBg }};color:{{ paypalBtnColor }};cursor:pointer;font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);">PayPal</button>
+            </div>
+
+            <sc-if value="{{ isCardPayment }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;flex-direction:column;gap:var(--space-4);">
+                <input type="text" placeholder="Name on card" value="{{ cardName }}" onChange="{{ setCardName }}" style="background:transparent;border:none;border-bottom:1px solid var(--hairline-on-light);color:var(--text-on-light);font:var(--weight-body-regular) var(--size-body)/1 var(--font-body);padding:var(--space-3) 0;outline:none;">
+                <input type="text" placeholder="Card number" value="{{ cardNumber }}" onChange="{{ setCardNumber }}" style="background:transparent;border:none;border-bottom:1px solid var(--hairline-on-light);color:var(--text-on-light);font:var(--weight-body-regular) var(--size-body)/1 var(--font-body);padding:var(--space-3) 0;outline:none;">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);">
+                  <input type="text" placeholder="MM / YY" value="{{ cardExpiry }}" onChange="{{ setCardExpiry }}" style="background:transparent;border:none;border-bottom:1px solid var(--hairline-on-light);color:var(--text-on-light);font:var(--weight-body-regular) var(--size-body)/1 var(--font-body);padding:var(--space-3) 0;outline:none;">
+                  <input type="text" placeholder="CVV" value="{{ cardCvv }}" onChange="{{ setCardCvv }}" style="background:transparent;border:none;border-bottom:1px solid var(--hairline-on-light);color:var(--text-on-light);font:var(--weight-body-regular) var(--size-body)/1 var(--font-body);padding:var(--space-3) 0;outline:none;">
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ isPaypalPayment }}" hint-placeholder-val="{{ false }}">
+              <div style="border:1px solid var(--hairline-on-light);padding:var(--space-6);text-align:center;font:var(--weight-body-regular) var(--size-body)/1.5 var(--font-body);color:var(--text-on-light-muted);">You'll be redirected to PayPal to complete your payment after review.</div>
+            </sc-if>
+
+            <label style="display:flex;align-items:center;gap:var(--space-3);margin:var(--space-7) 0 var(--space-4);font:var(--weight-body-regular) var(--size-body)/1 var(--font-body);cursor:pointer;">
+              <input type="checkbox" checked="{{ billingSame }}" onChange="{{ toggleBillingSame }}"> Billing address same as shipping
+            </label>
+
+            <div style="display:flex;gap:var(--space-3);margin-top:var(--space-7);">
+              <button onClick="{{ goShipping }}" style="background:none;border:1px solid var(--hairline-on-light);color:var(--text-on-light);font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);padding:var(--space-4) var(--space-7);cursor:pointer;">Back</button>
+              <button onClick="{{ goReview }}" style="background:var(--surface-black);color:var(--text-on-dark);font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);padding:var(--space-4) var(--space-7);border:none;cursor:pointer;" style-hover="background:var(--surface-magenta);">Review order</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isStepReview }}" hint-placeholder-val="{{ false }}">
+          <div>
+            <div style="font:var(--weight-display) var(--size-display-md)/var(--leading-display-tight) var(--font-display);text-transform:uppercase;margin-bottom:var(--space-6);">Review &amp; place order</div>
+
+            <div style="display:flex;flex-direction:column;gap:var(--space-2);font:var(--weight-body-regular) var(--size-body)/1.6 var(--font-body);color:var(--text-on-light-muted);margin-bottom:var(--space-7);">
+              <div><strong style="color:var(--text-on-light);">Ship to:</strong> {{ shipName }}, {{ shipAddress }}, {{ shipCity }} {{ shipZip }}, {{ shipCountry }}</div>
+              <div><strong style="color:var(--text-on-light);">Method:</strong> {{ shippingMethod }}</div>
+              <div><strong style="color:var(--text-on-light);">Pay with:</strong> {{ paymentMethod }}</div>
+            </div>
+
+            <div style="font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);color:var(--text-on-light-faint);margin-bottom:var(--space-4);">Coupon code</div>
+            <div style="display:flex;gap:var(--space-3);margin-bottom:var(--space-3);">
+              <input type="text" placeholder="Enter code" value="{{ couponCode }}" onChange="{{ setCouponCode }}" style="flex:1;background:transparent;border:1px solid var(--hairline-on-light);color:var(--text-on-light);font:var(--weight-body-regular) var(--size-body)/1 var(--font-body);padding:var(--space-3) var(--space-4);outline:none;">
+              <button onClick="{{ applyCoupon }}" style="background:var(--surface-black);color:var(--text-on-dark);font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);padding:0 var(--space-6);border:none;cursor:pointer;" style-hover="background:var(--surface-magenta);">Apply</button>
+            </div>
+            <sc-if value="{{ couponIsApplied }}" hint-placeholder-val="{{ false }}">
+              <div style="font:var(--weight-body-medium) var(--size-caption)/1.4 var(--font-body);color:var(--text-on-light);margin-bottom:var(--space-7);">Coupon applied — {{ couponLabel }}</div>
+            </sc-if>
+            <sc-if value="{{ couponHasError }}" hint-placeholder-val="{{ false }}">
+              <div style="font:var(--weight-body-medium) var(--size-caption)/1.4 var(--font-body);color:var(--surface-magenta);margin-bottom:var(--space-7);">{{ couponError }}</div>
+            </sc-if>
+
+            <div style="display:flex;gap:var(--space-3);">
+              <button onClick="{{ goPayment }}" style="background:none;border:1px solid var(--hairline-on-light);color:var(--text-on-light);font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);padding:var(--space-4) var(--space-7);cursor:pointer;">Back</button>
+              <button onClick="{{ placeOrder }}" style="background:var(--surface-black);color:var(--text-on-dark);font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);padding:var(--space-4) var(--space-7);border:none;cursor:pointer;" style-hover="background:var(--surface-magenta);">Place order</button>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+
+      <div style="background:var(--surface-white);border:1px solid var(--hairline-on-light);padding:var(--space-6);position:sticky;top:0;">
+        <div style="font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);margin-bottom:var(--space-5);">Order summary</div>
+        <sc-for list="{{ cartItemsView }}" as="item" hint-placeholder-count="0">
+          <div style="display:flex;justify-content:space-between;gap:var(--space-3);font:var(--weight-body-regular) var(--size-body-sm)/1.4 var(--font-body);padding:var(--space-3) 0;border-bottom:1px solid var(--hairline-on-light);">
+            <span>{{ item.name }} × {{ item.qty }}</span>
+            <span>${{ item.price }}</span>
+          </div>
+        </sc-for>
+        <div style="display:flex;flex-direction:column;gap:var(--space-2);margin-top:var(--space-5);font:var(--weight-body-regular) var(--size-body-sm)/1.4 var(--font-body);color:var(--text-on-light-muted);">
+          <div style="display:flex;justify-content:space-between;"><span>Subtotal</span><span>${{ cartSubtotal }}</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>Discount</span><span>-${{ discountAmount }}</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>Shipping</span><span>${{ shippingCost }}</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>Tax</span><span>${{ taxAmount }}</span></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font:var(--weight-body-bold) var(--size-body-lg)/1 var(--font-body);margin-top:var(--space-5);padding-top:var(--space-4);border-top:1px solid var(--hairline-on-light);">
+          <span style="text-transform:uppercase;letter-spacing:var(--tracking-label);">Total</span>
+          <span>${{ orderTotal }}</span>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+  </div>
+
+  <!-- HERO -->
+  <div data-screen-label="Hero" style="position:relative;width:100%;height:92vh;min-height:560px;overflow:hidden;background:var(--surface-black);">
+    <div style="position:absolute;inset:0;">
+      <img src="uploads/Cover_00_1-a93cc734.jpg" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
+    </div>
+    <div style="position:absolute;inset:0;background:rgba(10,10,10,0.4);pointer-events:none;"></div>
+    <div style="position:absolute;left:0;right:0;bottom:0;padding:var(--space-9) var(--page-margin);box-sizing:border-box;color:var(--text-on-dark);pointer-events:none;">
+      <div style="font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);margin-bottom:var(--space-4);opacity:0.85;">GMH</div>
+      <div style="font:var(--weight-display) var(--size-display-2xl)/var(--leading-display-tight) var(--font-display);text-transform:uppercase;max-width:14ch;">GAY MAN HISTORY BOOK</div>
+      <div style="font:var(--weight-body-regular) var(--size-body-lg)/1.4 var(--font-body);margin-top:var(--space-4);max-width:36ch;color:var(--text-on-dark-muted);">Gay life, decade by decade — nightlife, activism, and the people who lived it.</div>
+      <button onClick="{{ addBook }}" style="display: inline-flex; align-items: center; gap: var(--space-3); background: var(--surface-white); color: var(--text-on-light); font: var(--weight-body-bold) var(--size-label)/1 var(--font-body); text-transform: uppercase; letter-spacing: var(--tracking-label); padding: var(--space-4) var(--space-6); border-radius: var(--radius-0); border: none; cursor: pointer; margin-top: var(--space-6); width: fit-content; pointer-events: auto" style-hover="background:var(--surface-magenta);color:var(--text-on-dark);">Buy the book — $95</button>
+      <div style="font:var(--weight-body-regular) var(--size-caption)/1 var(--font-body);color:var(--text-on-dark-muted);margin-top:var(--space-3);">Free shipping</div>
+    </div>
+  </div>
+
+  <!-- DECADE STRIP -->
+  <div data-screen-label="Decades" id="book" style="padding:var(--space-8) var(--page-margin);box-sizing:border-box;">
+    <div style="font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);color:var(--text-on-light-faint);margin-bottom:var(--space-5);">Periods featured in the book</div>
+    <div style="display:flex;flex-wrap:wrap;gap:var(--space-3);">
+      <x-import component-from-global-scope="GMHBookDesignSystem_d91c62.EraTag" label="Prehistory" surface="black" hint-size="auto,32px"></x-import>
+      <x-import component-from-global-scope="GMHBookDesignSystem_d91c62.EraTag" label="Egypt" surface="black" hint-size="auto,32px"></x-import>
+      <x-import component-from-global-scope="GMHBookDesignSystem_d91c62.EraTag" label="Greece" surface="black" hint-size="auto,32px"></x-import>
+      <x-import component-from-global-scope="GMHBookDesignSystem_d91c62.EraTag" label="Rome" surface="black" hint-size="auto,32px"></x-import>
+      <x-import component-from-global-scope="GMHBookDesignSystem_d91c62.EraTag" label="Byzantine" surface="black" hint-size="auto,32px"></x-import>
+      <x-import component-from-global-scope="GMHBookDesignSystem_d91c62.EraTag" label="Romanesque" surface="black" hint-size="auto,32px"></x-import>
+      <x-import component-from-global-scope="GMHBookDesignSystem_d91c62.EraTag" label="Gothic" surface="black" hint-size="auto,32px"></x-import>
+      <x-import component-from-global-scope="GMHBookDesignSystem_d91c62.EraTag" label="Renaissance" surface="black" hint-size="auto,32px"></x-import>
+      <x-import component-from-global-scope="GMHBookDesignSystem_d91c62.EraTag" label="Baroque" surface="black" hint-size="auto,32px"></x-import>
+      <x-import component-from-global-scope="GMHBookDesignSystem_d91c62.EraTag" label="Rococo" surface="black" hint-size="auto,32px"></x-import>
+      <x-import component-from-global-scope="GMHBookDesignSystem_d91c62.EraTag" label="Neoclassicism" surface="black" hint-size="auto,32px"></x-import>
+      <x-import component-from-global-scope="GMHBookDesignSystem_d91c62.EraTag" label="Paris" surface="black" hint-size="auto,32px"></x-import>
+      <x-import component-from-global-scope="GMHBookDesignSystem_d91c62.EraTag" label="Berlin" surface="black" hint-size="auto,32px"></x-import>
+      <x-import component-from-global-scope="GMHBookDesignSystem_d91c62.EraTag" label="New York" surface="black" hint-size="auto,32px"></x-import>
+    </div>
+  </div>
+
+  <!-- BOOK DETAIL -->
+  <div data-screen-label="Book detail" style="{{ bookDetailGridStyle }}">
+    <figure style="margin:0;">
+      <div style="position:relative;width:100%;height:520px;overflow:hidden;">
+        <div style="{{ bookTrackStyle }}">
+          <div style="width:20%;height:100%;flex-shrink:0;"><img src="uploads/cover2.jpg" alt="Gay Men History — hardcover" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+          <div style="width:20%;height:100%;flex-shrink:0;"><img src="uploads/33-eb81f265.jpg" alt="Egypt — Same sex and human behaviors, 3500BC–1000BC" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+          <div style="width:20%;height:100%;flex-shrink:0;"><img src="uploads/44-18d42cb0.jpg" alt="Neoclassicism &amp; Romanticism, 1760–1860" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+          <div style="width:20%;height:100%;flex-shrink:0;"><img src="uploads/55-8cf64e49.jpg" alt="Baroque &amp; Rococo, 1600–1750" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+          <div style="width:20%;height:100%;flex-shrink:0;"><img src="uploads/66-c6bea3ec.jpg" alt="Berlin, 1900–1940" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+        </div>
+        <button onClick="{{ prevBookImage }}" aria-label="Previous image" style="position:absolute;left:var(--space-4);top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:none;background:var(--surface-white);color:var(--text-on-light);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;" style-hover="background:var(--surface-magenta);color:var(--text-on-dark);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <button onClick="{{ nextBookImage }}" aria-label="Next image" style="position:absolute;right:var(--space-4);top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:none;background:var(--surface-white);color:var(--text-on-light);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;" style-hover="background:var(--surface-magenta);color:var(--text-on-dark);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+        <div style="position:absolute;left:50%;bottom:var(--space-4);transform:translateX(-50%);display:flex;gap:var(--space-2);z-index:2;">
+          <sc-for list="{{ bookImageDots }}" as="dot" hint-placeholder-count="5">
+            <button onClick="{{ dot.onClick }}" aria-label="Go to image" style="{{ dot.style }}"></button>
+          </sc-for>
+        </div>
+      </div>
+      <figcaption style="display:flex;justify-content:space-between;gap:var(--space-3);margin-top:var(--space-2);font:var(--weight-body-medium) var(--size-caption)/1.4 var(--font-body);color:var(--text-on-light-muted);">
+        <span>{{ activeBookImageCaption }}</span>
+        <span style="text-transform:uppercase;letter-spacing:var(--tracking-caption);white-space:nowrap;">Photo credit</span>
+      </figcaption>
+    </figure>
+    <div>
+      <div style="font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);color:var(--text-on-light-faint);margin-bottom:var(--space-5);">Inside the book</div>
+      
+      <x-import component-from-global-scope="GMHBookDesignSystem_d91c62.DropCapParagraph" text="Step into a remarkable visual journey through centuries of love, beauty, and identity. Featuring over 350 pages of stunning AI-generated artwork inspired by archaeological discoveries and art history, Gay Men History is a collectible coffee table book unlike anything you've seen before." surface="white" hint-size="100%,auto" style="display: none"></x-import><p style="margin-top:var(--space-7);font:var(--weight-body-regular) var(--size-body)/1.6 var(--font-body);color:var(--text-on-light-muted);"><em data-start="1517" data-end="1534">Gay Men History</em> is a collectible coffee table book featuring breathtaking AI-generated artwork inspired by archaeology, mythology, and classical art. A unique visual journey celebrating love, beauty, identity, and the enduring legacy of gay culture.</p>
+    </div>
+  </div>
+
+  <!-- MANIFESTO -->
+  <div data-screen-label="Manifesto">
+    <x-import component-from-global-scope="GMHBookDesignSystem_d91c62.PullQuote" quote="More than a book—an enduring celebration of gay history and identity" attribution="GMH" surface="magenta" hint-size="100%,320px"></x-import>
+  </div>
+
+  <!-- ABOUT + AUTHOR -->
+  <div data-screen-label="About" id="about" style="{{ aboutGridStyle }}">
+    <img src="uploads/opt-shiko.jpg" alt="Shiko Van" style="width:100%;height:480px;object-fit:cover;display:block;">
+    <div>
+      <div style="font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);color:var(--text-on-light-faint);margin-bottom:var(--space-5);">About the author</div>
+      <div style="font:var(--weight-display) var(--size-display-lg)/var(--leading-display-tight) var(--font-display);text-transform:uppercase;margin-bottom:var(--space-5);">SHIKO VAN</div>
+      <div style="font:var(--weight-body-regular) var(--size-body-lg)/var(--leading-body) var(--font-body);color:var(--text-on-light-muted);max-width:52ch;margin:0;"><div>Drawing on his rich experience in fashion, Shiko creates each image through a careful process of historical research and artistic exploration. Every detail—from clothing and lighting to the smallest visual element—is refined to breathe life into the past.</div><div><br></div><div>His work doesn’t just revisit history—it reimagines it. With bold imagination and visual poetry, Shiko offers a vivid tribute to gay men history, making the invisible seen and the forgotten unforgettable.</div></div>
+    </div>
+  </div>
+
+  <!-- MERCH -->
+  <div data-screen-label="Merch" id="shop" style="padding:50px var(--page-margin) var(--space-9);box-sizing:border-box;background:var(--surface-white);">
+    <div style="font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);color:var(--text-on-light-faint);margin-bottom:var(--space-3);">BRING HISTORY TO EVERY DAY LIFE</div>
+    <div style="font:var(--weight-display) var(--size-display-lg)/var(--leading-display-tight) var(--font-display);text-transform:uppercase;margin-bottom:var(--space-8);">CHOOS LOVE ALL AROUND</div>
+
+    <div style="{{ merchGridStyle }}">
+
+      <div>
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="merch-mug-main" shape="rect" placeholder="Mug photo" style="width:100%;height:280px;" hint-size="100%,280px"></x-import>
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-2);margin-top:var(--space-2);">
+          <div style="width:100%;aspect-ratio:1;position:relative;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="merch-mug-1" shape="rect" placeholder="Print 1" style="width:100%;height:100%;" hint-size="100%,100%"></x-import></div>
+          <div style="width:100%;aspect-ratio:1;position:relative;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="merch-mug-2" shape="rect" placeholder="Print 2" style="width:100%;height:100%;" hint-size="100%,100%"></x-import></div>
+          <div style="width:100%;aspect-ratio:1;position:relative;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="merch-mug-3" shape="rect" placeholder="Print 3" style="width:100%;height:100%;" hint-size="100%,100%"></x-import></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:var(--space-4);">
+          <div style="font:var(--weight-body-bold) var(--size-body)/1.2 var(--font-body);">Mug</div>
+          <div style="font:var(--weight-body-regular) var(--size-body-sm)/1.2 var(--font-body);color:var(--text-on-light-muted);">$28</div>
+        </div>
+        <button onClick="{{ addMug }}" style="display:block;width:100%;text-align:center;margin-top:var(--space-3);background:var(--surface-black);color:var(--text-on-dark);font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);padding:var(--space-3) 0;border:none;cursor:pointer;" style-hover="background:var(--surface-magenta);">Add to cart</button>
+      </div>
+
+      <div>
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="merch-poster-main" shape="rect" placeholder="Poster photo" style="width:100%;height:280px;" hint-size="100%,280px"></x-import>
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-2);margin-top:var(--space-2);">
+          <div style="width:100%;aspect-ratio:1;position:relative;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="merch-poster-1" shape="rect" placeholder="Print 1" style="width:100%;height:100%;" hint-size="100%,100%"></x-import></div>
+          <div style="width:100%;aspect-ratio:1;position:relative;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="merch-poster-2" shape="rect" placeholder="Print 2" style="width:100%;height:100%;" hint-size="100%,100%"></x-import></div>
+          <div style="width:100%;aspect-ratio:1;position:relative;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="merch-poster-3" shape="rect" placeholder="Print 3" style="width:100%;height:100%;" hint-size="100%,100%"></x-import></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:var(--space-4);">
+          <div style="font:var(--weight-body-bold) var(--size-body)/1.2 var(--font-body);">Poster</div>
+          <div style="font:var(--weight-body-regular) var(--size-body-sm)/1.2 var(--font-body);color:var(--text-on-light-muted);">$38</div>
+        </div>
+        <button onClick="{{ addPoster }}" style="display:block;width:100%;text-align:center;margin-top:var(--space-3);background:var(--surface-black);color:var(--text-on-dark);font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);padding:var(--space-3) 0;border:none;cursor:pointer;" style-hover="background:var(--surface-magenta);">Add to cart</button>
+      </div>
+
+      <div>
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="merch-candle-main" shape="rect" placeholder="Candle photo" style="width:100%;height:280px;" hint-size="100%,280px"></x-import>
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-2);margin-top:var(--space-2);">
+          <div style="width:100%;aspect-ratio:1;position:relative;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="merch-candle-1" shape="rect" placeholder="Print 1" style="width:100%;height:100%;" hint-size="100%,100%"></x-import></div>
+          <div style="width:100%;aspect-ratio:1;position:relative;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="merch-candle-2" shape="rect" placeholder="Print 2" style="width:100%;height:100%;" hint-size="100%,100%"></x-import></div>
+          <div style="width:100%;aspect-ratio:1;position:relative;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="merch-candle-3" shape="rect" placeholder="Print 3" style="width:100%;height:100%;" hint-size="100%,100%"></x-import></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:var(--space-4);">
+          <div style="font:var(--weight-body-bold) var(--size-body)/1.2 var(--font-body);">Candle</div>
+          <div style="font:var(--weight-body-regular) var(--size-body-sm)/1.2 var(--font-body);color:var(--text-on-light-muted);">$24</div>
+        </div>
+        <button onClick="{{ addCandle }}" style="display:block;width:100%;text-align:center;margin-top:var(--space-3);background:var(--surface-black);color:var(--text-on-dark);font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);padding:var(--space-3) 0;border:none;cursor:pointer;" style-hover="background:var(--surface-magenta);">Add to cart</button>
+      </div>
+
+      <div>
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="merch-towel-main" shape="rect" placeholder="Towel photo" style="width:100%;height:280px;" hint-size="100%,280px"></x-import>
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-2);margin-top:var(--space-2);">
+          <div style="width:100%;aspect-ratio:1;position:relative;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="merch-towel-1" shape="rect" placeholder="Print 1" style="width:100%;height:100%;" hint-size="100%,100%"></x-import></div>
+          <div style="width:100%;aspect-ratio:1;position:relative;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="merch-towel-2" shape="rect" placeholder="Print 2" style="width:100%;height:100%;" hint-size="100%,100%"></x-import></div>
+          <div style="width:100%;aspect-ratio:1;position:relative;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="merch-towel-3" shape="rect" placeholder="Print 3" style="width:100%;height:100%;" hint-size="100%,100%"></x-import></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:var(--space-4);">
+          <div style="font:var(--weight-body-bold) var(--size-body)/1.2 var(--font-body);">Towel</div>
+          <div style="font:var(--weight-body-regular) var(--size-body-sm)/1.2 var(--font-body);color:var(--text-on-light-muted);">$32</div>
+        </div>
+        <button onClick="{{ addTowel }}" style="display:block;width:100%;text-align:center;margin-top:var(--space-3);background:var(--surface-black);color:var(--text-on-dark);font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);padding:var(--space-3) 0;border:none;cursor:pointer;" style-hover="background:var(--surface-magenta);">Add to cart</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div data-screen-label="Footer" style="background:var(--surface-black);color:var(--text-on-dark);padding:var(--space-9) var(--page-margin);box-sizing:border-box;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:var(--space-7);border-bottom:1px solid var(--hairline-on-dark);padding-bottom:var(--space-7);margin-bottom:var(--space-6);">
+      <div>
+        <div style="font:var(--weight-display) var(--size-display-md)/var(--leading-display-tight) var(--font-display);text-transform:uppercase;margin-bottom:var(--space-3);">Stay in touch</div>
+        <div style="font:var(--weight-body-regular) var(--size-body)/1.5 var(--font-body);color:var(--text-on-dark-muted);max-width:36ch;">New prints, new objects, and updates from the book — straight to your inbox.</div>
+      </div>
+      <div style="display:flex;gap:var(--space-3);">
+        <input type="email" placeholder="Email address" style="background:transparent;border:none;border-bottom:1px solid var(--hairline-on-dark);color:var(--text-on-dark);font:var(--weight-body-regular) var(--size-body)/1 var(--font-body);padding:var(--space-3) 0;width:260px;outline:none;">
+        <a href="#" style="display:inline-flex;align-items:center;background:var(--surface-white);color:var(--text-on-light);font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);padding:0 var(--space-6);text-decoration:none;" style-hover="background:var(--surface-magenta);color:var(--text-on-dark);">Join</a>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);color:var(--text-on-dark-muted);">
+      <span>GMH</span>
+      <div style="display:flex;gap:var(--space-6);">
+        <a href="#" style="text-decoration:none;color:inherit;">Shipping</a>
+        <a href="#" style="text-decoration:none;color:inherit;">Returns</a>
+        <a href="#" style="text-decoration:none;color:inherit;">Contact</a>
+      </div>
+      <span>© GMH</span>
+    </div>
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const PRODUCTS = {
+  book: { id: 'book', name: 'Gay Man History', price: 95 },
+  mug: { id: 'mug', name: 'Mug', price: 28 },
+  poster: { id: 'poster', name: 'Poster', price: 38 },
+  candle: { id: 'candle', name: 'Candle', price: 24 },
+  towel: { id: 'towel', name: 'Towel', price: 32 },
+};
+
+const SHIP_RATES = { standard: 6, express: 15 };
+
+class Component extends DCLogic {
+  state = {
+    isMobile: false, menuOpen: false, cartOpen: false, cartItems: [],
+    checkoutOpen: false, checkoutStep: 'shipping', orderPlaced: false, orderNumber: '',
+    shipEmail: '', shipName: '', shipAddress: '', shipCity: '', shipZip: '', shipCountry: '', shipPhone: '',
+    shippingMethod: 'standard',
+    paymentMethod: 'card',
+    cardNumber: '', cardExpiry: '', cardCvv: '', cardName: '',
+    billingSame: true, billAddress: '', billCity: '', billZip: '', billCountry: '',
+    couponCode: '', couponApplied: null, couponError: '',
+    bookImageIndex: 0,
+  };
+  bookImagesData = [
+    { id: 'book-image-1', src: 'uploads/cover2.jpg', caption: 'Gay Men History — hardcover.' },
+    { id: 'book-image-2', src: 'uploads/33-eb81f265.jpg', caption: 'Egypt — Same sex and human behaviors, 3500BC–1000BC.' },
+    { id: 'book-image-3', src: 'uploads/44-18d42cb0.jpg', caption: 'Neoclassicism & Romanticism, 1760–1860.' },
+    { id: 'book-image-4', src: 'uploads/55-8cf64e49.jpg', caption: 'Baroque & Rococo, 1600–1750.' },
+    { id: 'book-image-5', src: 'uploads/66-c6bea3ec.jpg', caption: 'Berlin, 1900–1940.' },
+  ];
+  componentDidMount() {
+    this.checkSize = () => this.setState({ isMobile: window.innerWidth <= 768 });
+    this.checkSize();
+    window.addEventListener('resize', this.checkSize);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.checkSize);
+  }
+  prevBookImage() {
+    this.setState(s => ({ bookImageIndex: (s.bookImageIndex - 1 + this.bookImagesData.length) % this.bookImagesData.length }));
+  }
+  nextBookImage() {
+    this.setState(s => ({ bookImageIndex: (s.bookImageIndex + 1) % this.bookImagesData.length }));
+  }
+  addToCart(product) {
+    this.setState(s => {
+      const exists = s.cartItems.some(i => i.id === product.id);
+      const cartItems = exists
+        ? s.cartItems.map(i => i.id === product.id ? { ...i, qty: i.qty + 1 } : i)
+        : [...s.cartItems, { ...product, qty: 1 }];
+      return { cartItems, cartOpen: true, menuOpen: false };
+    });
+  }
+  incQty(id) {
+    this.setState(s => ({ cartItems: s.cartItems.map(i => i.id === id ? { ...i, qty: i.qty + 1 } : i) }));
+  }
+  decQty(id) {
+    this.setState(s => ({ cartItems: s.cartItems.map(i => i.id === id ? { ...i, qty: i.qty - 1 } : i).filter(i => i.qty > 0) }));
+  }
+  removeItem(id) {
+    this.setState(s => ({ cartItems: s.cartItems.filter(i => i.id !== id) }));
+  }
+  field(key) {
+    return (e) => this.setState({ [key]: e.target.value });
+  }
+  openCheckout() {
+    this.setState({ cartOpen: false, checkoutOpen: true, checkoutStep: 'shipping', orderPlaced: false });
+  }
+  closeCheckout() {
+    this.setState({ checkoutOpen: false });
+  }
+  goStep(step) {
+    this.setState({ checkoutStep: step });
+  }
+  setPaymentMethod(method) {
+    this.setState({ paymentMethod: method });
+  }
+  toggleBillingSame() {
+    this.setState(s => ({ billingSame: !s.billingSame }));
+  }
+  applyCoupon() {
+    const code = this.state.couponCode.trim().toUpperCase();
+    if (!code) { this.setState({ couponError: 'Enter a code.', couponApplied: null }); return; }
+    if (code === 'GMH10') {
+      this.setState({ couponApplied: { code, pct: 0.10, label: '10% off' }, couponError: '' });
+    } else {
+      this.setState({ couponApplied: null, couponError: 'That code is not valid.' });
+    }
+  }
+  placeOrder() {
+    const orderNumber = 'GMH-' + Math.floor(100000 + Math.random() * 900000);
+    this.setState({ orderPlaced: true, orderNumber, cartItems: [] });
+  }
+  renderVals() {
+    const n = this.bookImagesData.length;
+    const bookImages = this.bookImagesData.map(img => ({ ...img, slideWrapStyle: `width:${100 / n}%;height:100%;flex-shrink:0;` }));
+    const bookTrackStyle = `display:flex;width:${n * 100}%;height:100%;transform:translateX(-${this.state.bookImageIndex * (100 / n)}%);transition:transform .5s cubic-bezier(0.65,0,0.35,1);`;
+    const cartItems = this.state.cartItems;
+    const cartCount = cartItems.reduce((n, i) => n + i.qty, 0);
+    const activeBookImageCaption = this.bookImagesData[this.state.bookImageIndex].caption;
+    const bookImageDots = this.bookImagesData.map((_, i) => ({
+      onClick: () => this.setState({ bookImageIndex: i }),
+      style: `width:8px;height:8px;padding:0;border-radius:50%;border:none;cursor:pointer;background:${i === this.state.bookImageIndex ? 'var(--surface-magenta)' : 'rgba(255,255,255,0.6)'};`,
+    }));
+    const cartSubtotal = cartItems.reduce((n, i) => n + i.qty * i.price, 0);
+    const cartItemsView = cartItems.map(i => ({
+      ...i,
+      inc: () => this.incQty(i.id),
+      dec: () => this.decQty(i.id),
+      remove: () => this.removeItem(i.id),
+    }));
+    const shippingCost = SHIP_RATES[this.state.shippingMethod] ?? SHIP_RATES.standard;
+    const discountAmount = this.state.couponApplied ? +(cartSubtotal * this.state.couponApplied.pct).toFixed(2) : 0;
+    const taxAmount = +((cartSubtotal - discountAmount) * 0.08).toFixed(2);
+    const orderTotal = +(cartSubtotal - discountAmount + shippingCost + taxAmount).toFixed(2);
+    return {
+      isMobile: this.state.isMobile,
+      isDesktop: !this.state.isMobile,
+      bookImages,
+      bookTrackStyle,
+      activeBookImageCaption,
+      bookImageDots,
+      prevBookImage: () => this.prevBookImage(),
+      nextBookImage: () => this.nextBookImage(),
+      bookDetailGridStyle: `display:grid;grid-template-columns:${this.state.isMobile ? 'minmax(0,1fr)' : 'minmax(0,1fr) minmax(0,1fr)'};gap:var(--space-8);padding:0 var(--page-margin) var(--space-9);box-sizing:border-box;align-items:start;`,
+      aboutGridStyle: `display:grid;grid-template-columns:${this.state.isMobile ? 'minmax(0,1fr)' : 'minmax(0,1fr) minmax(0,1fr)'};gap:var(--space-8);padding:var(--space-9) var(--page-margin) 50px;box-sizing:border-box;align-items:start;`,
+      merchGridStyle: `display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:var(--space-7);`,
+      menuOpen: this.state.menuOpen,
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
+      closeMenu: () => this.setState({ menuOpen: false }),
+      cartOpen: this.state.cartOpen,
+      cartCount,
+      cartSubtotal,
+      cartItemsView,
+      cartHasItems: cartItems.length > 0,
+      cartIsEmpty: cartItems.length === 0,
+      openCart: () => this.setState({ cartOpen: true, menuOpen: false }),
+      closeCart: () => this.setState({ cartOpen: false }),
+      cartDrawerStyle: `position:fixed;top:0;right:0;height:100dvh;width:${this.state.isMobile ? '100%' : '420px'};max-width:100%;background:var(--surface-white);z-index:50;display:flex;flex-direction:column;box-shadow:-8px 0 32px rgba(0,0,0,.18);transform:translateX(${this.state.cartOpen ? '0' : '100%'});transition:transform .35s cubic-bezier(.4,0,.2,1);`,
+      addBook: () => this.addToCart(PRODUCTS.book),
+      addMug: () => this.addToCart(PRODUCTS.mug),
+      addPoster: () => this.addToCart(PRODUCTS.poster),
+      addCandle: () => this.addToCart(PRODUCTS.candle),
+      addTowel: () => this.addToCart(PRODUCTS.towel),
+      openCheckout: () => this.openCheckout(),
+      closeCheckout: () => this.closeCheckout(),
+      checkoutOpen: this.state.checkoutOpen,
+      checkoutOverlayStyle: `position:fixed;inset:0;z-index:60;background:var(--surface-white);display:flex;flex-direction:column;transform:translateX(${this.state.checkoutOpen ? '0' : '100%'});transition:transform .35s cubic-bezier(.4,0,.2,1);overflow-y:auto;`,
+      checkoutLayoutStyle: `display:grid;grid-template-columns:${this.state.isMobile ? '1fr' : 'minmax(0,1.4fr) minmax(320px,1fr)'};gap:var(--space-9);padding:var(--space-8) var(--page-margin);box-sizing:border-box;flex:1;align-items:start;`,
+      orderPlaced: this.state.orderPlaced,
+      orderNumber: this.state.orderNumber,
+
+      isStepShipping: this.state.checkoutStep === 'shipping',
+      isStepPayment: this.state.checkoutStep === 'payment',
+      isStepReview: this.state.checkoutStep === 'review',
+      goShipping: () => this.goStep('shipping'),
+      goPayment: () => this.goStep('payment'),
+      goReview: () => this.goStep('review'),
+      stepShippingLabelStyle: `font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);color:${this.state.checkoutStep === 'shipping' ? 'var(--text-on-light)' : 'var(--text-on-light-faint)'};`,
+      stepPaymentLabelStyle: `font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);color:${this.state.checkoutStep === 'payment' ? 'var(--text-on-light)' : 'var(--text-on-light-faint)'};`,
+      stepReviewLabelStyle: `font:var(--weight-body-bold) var(--size-label)/1 var(--font-body);text-transform:uppercase;letter-spacing:var(--tracking-label);color:${this.state.checkoutStep === 'review' ? 'var(--text-on-light)' : 'var(--text-on-light-faint)'};`,
+
+      shipEmail: this.state.shipEmail, setShipEmail: this.field('shipEmail'),
+      shipName: this.state.shipName, setShipName: this.field('shipName'),
+      shipAddress: this.state.shipAddress, setShipAddress: this.field('shipAddress'),
+      shipCity: this.state.shipCity, setShipCity: this.field('shipCity'),
+      shipZip: this.state.shipZip, setShipZip: this.field('shipZip'),
+      shipCountry: this.state.shipCountry, setShipCountry: this.field('shipCountry'),
+      shipPhone: this.state.shipPhone, setShipPhone: this.field('shipPhone'),
+
+      shippingMethod: this.state.shippingMethod,
+      isStandardShipping: this.state.shippingMethod === 'standard',
+      isExpressShipping: this.state.shippingMethod === 'express',
+      setStandardShipping: () => this.setState({ shippingMethod: 'standard' }),
+      setExpressShipping: () => this.setState({ shippingMethod: 'express' }),
+
+      paymentMethod: this.state.paymentMethod,
+      isCardPayment: this.state.paymentMethod === 'card',
+      isPaypalPayment: this.state.paymentMethod === 'paypal',
+      setCardPayment: () => this.setPaymentMethod('card'),
+      setPaypalPayment: () => this.setPaymentMethod('paypal'),
+      cardBtnBg: this.state.paymentMethod === 'card' ? 'var(--surface-black)' : 'transparent',
+      cardBtnColor: this.state.paymentMethod === 'card' ? 'var(--text-on-dark)' : 'var(--text-on-light)',
+      paypalBtnBg: this.state.paymentMethod === 'paypal' ? 'var(--surface-black)' : 'transparent',
+      paypalBtnColor: this.state.paymentMethod === 'paypal' ? 'var(--text-on-dark)' : 'var(--text-on-light)',
+      cardNumber: this.state.cardNumber, setCardNumber: this.field('cardNumber'),
+      cardExpiry: this.state.cardExpiry, setCardExpiry: this.field('cardExpiry'),
+      cardCvv: this.state.cardCvv, setCardCvv: this.field('cardCvv'),
+      cardName: this.state.cardName, setCardName: this.field('cardName'),
+
+      billingSame: this.state.billingSame,
+      toggleBillingSame: () => this.toggleBillingSame(),
+      billAddress: this.state.billAddress, setBillAddress: this.field('billAddress'),
+      billCity: this.state.billCity, setBillCity: this.field('billCity'),
+      billZip: this.state.billZip, setBillZip: this.field('billZip'),
+      billCountry: this.state.billCountry, setBillCountry: this.field('billCountry'),
+
+      couponCode: this.state.couponCode, setCouponCode: this.field('couponCode'),
+      applyCoupon: () => this.applyCoupon(),
+      couponApplied: this.state.couponApplied,
+      couponError: this.state.couponError,
+      couponHasError: !!this.state.couponError,
+      couponIsApplied: !!this.state.couponApplied,
+      couponLabel: this.state.couponApplied ? this.state.couponApplied.label : '',
+
+      placeOrder: () => this.placeOrder(),
+
+      shippingCost,
+      discountAmount,
+      taxAmount,
+      orderTotal,
+    };
+  }
+}
+</script>
+</body>
+</html>
