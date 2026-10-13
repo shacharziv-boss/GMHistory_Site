@@ -53,12 +53,7 @@ module.exports = async (req, res) => {
   params.append('shipping_options[0][shipping_rate_data][type]', 'fixed_amount');
   params.append('shipping_options[0][shipping_rate_data][fixed_amount][amount]', '0');
   params.append('shipping_options[0][shipping_rate_data][fixed_amount][currency]', 'usd');
-  params.append('shipping_options[0][shipping_rate_data][display_name]', 'Standard (5–7 days) — Free');
-
-  params.append('shipping_options[1][shipping_rate_data][type]', 'fixed_amount');
-  params.append('shipping_options[1][shipping_rate_data][fixed_amount][amount]', '1500');
-  params.append('shipping_options[1][shipping_rate_data][fixed_amount][currency]', 'usd');
-  params.append('shipping_options[1][shipping_rate_data][display_name]', 'Express (2–3 days)');
+  params.append('shipping_options[0][shipping_rate_data][display_name]', 'Free shipping (about 2 weeks)');
 
   const email = body && typeof body.email === 'string' ? body.email.trim() : '';
   if (email && EMAIL_PATTERN.test(email)) {
