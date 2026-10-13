@@ -95,7 +95,13 @@ async function sendOrderEmails(session) {
   const customerEmail = customerDetails.email || session.customer_email || '';
   const customerName = customerDetails.name || '';
   const customerPhone = customerDetails.phone || '';
-  const shippingDetails = session.shipping_details || session.shipping || {};
+  // Newer Stripe API versions moved shipping info to collected_information.shipping_details;
+  // older versions use shipping_details (or the legacy shipping) field.
+  const shippingDetails =
+    (session.collected_information && session.collected_information.shipping_details) ||
+    session.shipping_details ||
+    session.shipping ||
+    {};
   const shippingName = shippingDetails.name || customerName;
   const shippingAddress = formatAddress(shippingDetails.address);
   const billingAddress = formatAddress(customerDetails.address);
