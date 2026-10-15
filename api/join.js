@@ -8,6 +8,10 @@ function isValidEmail(email) {
   return EMAIL_PATTERN.test(trimmed);
 }
 
+function escapeHtml(v) {
+  return String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
@@ -62,7 +66,7 @@ module.exports = async (req, res) => {
         to: notifyEmails,
         subject: 'New newsletter signup',
         text: `Subscriber email: ${email}\nDate and time: ${formatted}`,
-        html: `<p><strong>Subscriber email:</strong> ${email}</p><p><strong>Date and time:</strong> ${formatted}</p>`,
+        html: `<p><strong>Subscriber email:</strong> ${escapeHtml(email)}</p><p><strong>Date and time:</strong> ${formatted}</p>`,
       }),
     });
 

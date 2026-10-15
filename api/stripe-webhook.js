@@ -34,6 +34,10 @@ function isValidStripeSignature(rawBody, sigHeader, secret, toleranceSeconds = 3
   return age <= toleranceSeconds;
 }
 
+function escapeHtml(v) {
+  return String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
 async function sendEmail({ apiKey, from, to, subject, html, text }) {
   const resp = await fetch(RESEND_API_URL, {
     method: 'POST',
@@ -144,7 +148,7 @@ async function sendOrderEmails(session) {
         ['Stripe session', orderId],
       ];
       const htmlRows = detailRows
-        .map(([label, value]) => `<tr><td style="padding:4px 12px 4px 0;color:#666;white-space:nowrap;">${label}</td><td style="padding:4px 0;white-space:pre-line;"><strong>${value}</strong></td></tr>`)
+        .map(([label, value]) => `<tr><td style="padding:4px 12px 4px 0;color:#666;white-space:nowrap;">${escapeHtml(label)}</td><td style="padding:4px 0;white-space:pre-line;"><strong>${escapeHtml(value)}</strong></td></tr>`)
         .join('');
       const textRows = detailRows.map(([label, value]) => `${label}: ${value}`).join('\n');
 
